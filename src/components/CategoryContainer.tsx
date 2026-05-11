@@ -50,8 +50,8 @@ export default function CategoryContainer({ category, catId, handleAddProduct, h
                     <div class="product-row flex items-center gap-2.5 py-2.5 px-5 border-b border-b-amber-800/20 transition-all duration-100 hover:bg-rose-100">
                         <span class="product-name flex-1">{p.name}</span>
                         <span class="product-price">{formatPrice(p.price)}</span>
-                        <button class="btn py-2 px-3 border-transparent hover:bg-rose-300 hover:border-rose-400" title="Editar" onClick={(e) => handleEditProduct(catId, pi)}>✏️</button>
-                        <button class="btn py-2 px-3 border-transparent hover:bg-red-700" title="Eliminar" onClick={(e) => handleDeleteProduct(catId, pi)}>🗑</button>
+                        <button class="btn py-2 px-3 border-transparent hover:bg-rose-300 hover:border-rose-400" title="Editar" onClick={(e) => handleEditProduct(catId, p.id)}>✏️</button>
+                        <button class="btn py-2 px-3 border-transparent hover:bg-red-700" title="Eliminar" onClick={(e) => handleDeleteProduct(catId, p.id)}>🗑</button>
                     </div>
                 )}
                 <div class="add-product-row flex lg:flex-row flex-col gap-2 py-3 px-5 border-t border-amber-900/20">

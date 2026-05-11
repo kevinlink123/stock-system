@@ -1,106 +1,115 @@
 
 import { type Product, type Category } from "../types";
 
+const API_URL="http://localhost:4000/api";
 
-export function getData(): Category[] {
+export function getDataFromLocalStorage() {
     return JSON.parse(localStorage.getItem('merceria_data') || '[]');
 }
 
+export async function getData(): Promise<Category[]> {
+    const result = await fetch(`${API_URL}/categories`);
+    const response = await result.json();
+    const data: Category[] = response.data;
+    localStorage.setItem('merceria_data', JSON.stringify(data));
+    return data;
+}
+
 export function save(data: Category[]) {
-  localStorage.setItem('merceria_data', JSON.stringify(data));
+    localStorage.setItem('merceria_data', JSON.stringify(data));
 }
 
-export function createCategory(name: string) {
-    const oldData = getData();
-    oldData.push({ name, products: [] });
-    save(oldData);
-    return oldData;
+export async function createCategory(name: string) {
+    const result = await fetch(`${API_URL}/categories`, {
+        method: "POST",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            name
+        })
+    });
 }
 
-export function editCategory(id: number, newName: string) {
-    const data = getData();
-
-    if (id < 0 || id >= data.length) {
+export async function editCategory(id: number, newName: string) {
+    if (!id) {
         console.error(`Índice ${id} inválido`);
         return false;
     }
-    
-    const newData = data.map((category, index) => {
-        return index === id ? {...category, name: newName} : category;
+    const result = await fetch(`${API_URL}/categories/${id}`, {
+        method: "PUT",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            name: newName
+        })
     });
-    save(newData);
-    return newData;
 }
 
-export function deleteCategory(id: number) {
-    const data = getData();
-
+export async function deleteCategory(id: number) {
     if(!id) {
-        console.log("No category found!");
+        console.error("No category found!");
+        const data = getDataFromLocalStorage();
         return data;
     }
 
-    const newData = data.filter((_, index) => index !== id);
-    save(newData);
-    return newData;
+    const result = await fetch(`${API_URL}/categories/${id}`, {
+        method: "DELETE",
+        headers: {
+            "content-type": "application/json"
+        },
+    });
+
 }
 
-export function addProduct(categoryId: number, newProduct: Product) {
-    const oldData = getData();
-    oldData[categoryId].products.push(newProduct);
-    save(oldData);
-    return oldData;
+export async function addProduct(categoryId: number, newProduct: { name: string, price: number }) {
+    const result = await fetch(`${API_URL}/products`, {
+        method: "POST",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            ...newProduct,
+            category_id: categoryId
+        })
+    });
 }
 
 
-export function editProduct(categoryId: number, productId: number, newData: { name: string, price: number }) {
-    const oldData = getData();
-
-    if(!oldData[categoryId]) {
-        console.error(`Category with id ${categoryId} not found`);
+export async function editProduct(categoryId: number, productId: number, newData: { name: string, price: number }) {
+    if(!categoryId) {
+        console.error(`Category ID ${categoryId} invalid!`);
         return;
     }
-    if (!oldData[categoryId].products[productId]) {
+    if (!productId) {
+        console.error(`Product ID ${productId} invalid`);
+        return;
+    }
+
+    const result = await fetch(`${API_URL}/products/${productId}`, {
+        method: "PUT",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify(newData)
+    });
+}
+
+export async function deleteProduct(categoryId: number, productId: number) {
+    if(!categoryId) {
+        console.error(`Category with id ${categoryId} invalid`);
+        return;
+    }
+    if (!productId) {
         console.error(`Product with id ${productId} not found in category with id ${categoryId}`);
         return;
     }
 
-    const updatedData = oldData.map((category, i) => 
-        i === categoryId 
-            ? {
-                ...category,
-                products: category.products.map((product, j) =>
-                    j === productId
-                        ? { ...product, ...newData }  // ← Spread correcto aquí
-                        : product
-                )
-              }
-            : category
-    );
-    save(updatedData);
-    return updatedData;
-}
-
-export function deleteProduct(categoryId: number, productId: number) {
-    const oldData = getData();
-
-    if(!oldData[categoryId]) {
-        console.error(`Category with id ${categoryId} not found`);
-        return oldData;
-    }
-    if (!oldData[categoryId].products[productId]) {
-        console.error(`Product with id ${productId} not found in category with id ${categoryId}`);
-        return oldData;
-    }
-
-    const newData = oldData.map((category, index) => 
-    index === categoryId
-        ? {
-            ...category,
-            products: category.products.filter((_, productIndex) => productIndex !== productId)
-        }
-        : category
-    );
-    save(newData);
-    return newData;
+    const result = await fetch(`${API_URL}/products/${productId}`, {
+        method: "DELETE",
+        headers: {
+            "content-type": "application/json"
+        },
+    });
 }

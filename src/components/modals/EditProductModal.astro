@@ -39,21 +39,23 @@ import type { Product } from "../../types";
     let prodId: number;
 
     //Listen local events
-    saveBtn?.addEventListener("click", (e) => {
-        console.log(catId);
-        console.log(prodId);
+    saveBtn?.addEventListener("click", async (e) => {
         const newProdName = (document.getElementById("edit-prod-name-input") as HTMLInputElement).value;
         const newProdPrice = (document.getElementById("edit-prod-price-input") as HTMLInputElement).value;
         if(!newProdName || !newProdPrice) {
             alert("Ni el nombre del producto ni el precio pueden estar vacios!");
             return;
         }
-        editProduct(catId, prodId, {
-            name: newProdName,
-            price: parseInt(newProdPrice)
-        });
-        modal?.classList.toggle("hidden");
-        window.location.reload();
+        try {
+            await editProduct(catId, prodId, {
+                name: newProdName,
+                price: parseInt(newProdPrice)
+            });
+            modal?.classList.toggle("hidden");
+            window.location.reload();
+        } catch(err) {
+            console.error(err);
+        }
     });
 
     closeBtn?.addEventListener("click", (e) => {

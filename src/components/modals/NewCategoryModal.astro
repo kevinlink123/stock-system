@@ -23,13 +23,13 @@
     const saveBtn = document.querySelector("div.modal-actions button.save-button");
 
     //Listen local events
-    saveBtn?.addEventListener("click", () => {
+    saveBtn?.addEventListener("click", async () => {
         const categoryName = (document.getElementById("cat-name-input") as HTMLInputElement).value;
         if(!categoryName) {
             alert("El nombre de la categoria no puede estar vacio");
             return;
         }
-        createCategory(categoryName);
+        await createCategory(categoryName);
         modal?.classList.toggle("hidden");
         window.location.reload();
     });

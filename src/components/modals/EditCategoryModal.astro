@@ -27,16 +27,19 @@
     let catId: number;
 
     //Listen local events
-    saveBtn?.addEventListener("click", (e) => {
-        console.log(catId);
+    saveBtn?.addEventListener("click", async (e) => {
         const categoryName = (document.getElementById("edit-cat-name-input") as HTMLInputElement).value;
         if(!categoryName) {
             alert("El nombre de la categoria no puede estar vacio");
             return;
         }
-        editCategory(catId, categoryName);
-        modal?.classList.toggle("hidden");
-        window.location.reload();
+        try {
+            await editCategory(catId, categoryName);
+            modal?.classList.toggle("hidden");
+            window.location.reload();
+        } catch(err) {
+            console.error(err);
+        }
     });
 
     closeBtn?.addEventListener("click", (e) => {
