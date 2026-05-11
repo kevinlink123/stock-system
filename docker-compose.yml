@@ -1,0 +1,15 @@
+services:
+  inventario-elyels:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inventario-elyels
+    restart: unless-stopped
+    ports:
+      - "3913:80"
+    networks:
+      - reverse-proxy_proxy_network
+    
+networks:
+  reverse-proxy_proxy_network:
+    external: true  # Indica que la network ya debe existir
