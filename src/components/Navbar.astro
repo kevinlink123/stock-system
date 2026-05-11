@@ -1,0 +1,29 @@
+---
+
+---
+
+<header class="header flex items-center justify-between sticky top-0 z-50 px-8 py-5 bg-gray-50 border-b-2 border-red-200">
+    <div class="title-container flex items-center gap-3">
+        <div class="logo flex justify-center items-center h-10 w-10 bg-rose-300 rounded-xl text-xl">🧵</div>
+        <h1 class="title text-2xl font-bold font-serif">Mercería{" "}<span class="block text-sm font-serif">Gestión de precios</span></h1>
+    </div>
+    <div class="button-container flex gap-2">
+        <button class="add-category btn border border-amber-900/20 bg-transparent text-amber-950 hover:bg-rose-100 hover:border-rose-400">+ Categoría</button>
+        <button class="generate-pdf btn bg-green-300/20 hover:text-gray-50 hover:bg-green-700/70">🖨 Imprimir PDF</button>
+    </div>
+</header>
+<script>
+    import { openNewCategoryModal } from "../scripts/eventBus";
+import { generarPDF } from "../scripts/pdfHandler";
+
+    const addCategoryBtn = document.querySelector("div.button-container button.add-category");
+    const generatePDFBtn = document.querySelector("div.button-container button.generate-pdf");
+    generatePDFBtn?.addEventListener("click", () => {
+        generarPDF();
+    });
+    addCategoryBtn?.addEventListener("click", () => {
+        openNewCategoryModal();
+    });
+
+
+</script>

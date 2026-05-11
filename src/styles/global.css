@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+    
+}
+
+:root {
+    --gangan: #e8b4bc;
+    --rose-dark: #c4757f;
+    --rose-light: #fdf0f2;
+    --rose-mid: #f5d5da;
+    --cream: #faf7f4;
+    --brown: #5c3d35;
+    --brown-light: #8a6058;
+    --brown-mid: #c4a09a;
+    --text: #3a2520;
+    --text-muted: #8a6058;
+    --border: #e8dbd9;
+    --white: #ffffff;
+    --green: #4a7c59;
+    --green-light: #eaf3ee;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --shadow: 0 2px 8px rgba(92, 61, 53, 0.08);
+    --shadow-lg: 0 8px 32px rgba(92, 61, 53, 0.12);
+  }
+
+  /* inline-flex items-center gap-1.5 transition-all font-sans text-sm px-5 py-2 rounded-lg */
+
+  @layer components {
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1.5);
+      transition-property: all;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function) /* cubic-bezier(0.4, 0, 0.2, 1) */);
+      transition-duration: var(--tw-duration, var(--default-transition-duration) /* 150ms */);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      padding-inline: calc(var(--spacing) * 5);
+      padding-block: calc(var(--spacing) * 2);
+      border-radius: var(--radius-lg);
+    }
+  }

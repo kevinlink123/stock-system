@@ -1,0 +1,55 @@
+<div id="modal-edit-cat" class="modal-cat hidden flex justify-center items-center fixed h-screen w-full z-100 bg-black/20">
+    <div class="modal-container mx-10 max-w-xl w-full bg-gray-50 p-8 rounded-xl">
+        <h2 id="edit-modal-cat-title" class="mb-5 text-title font-serif text-2xl font-bold text-amber-900">Renombrar categoría</h2>
+        <label class="text-amber-700 mb-1  uppercase">Nuevo nombre</label>
+        <div class="category-input-wrapper flex gap-2 mb-4">
+            <input 
+                id="edit-cat-name-input"
+                class="flex-1 font-sans py-2 px-3.5 border-[1.5px] border-red-300 rounded-xl"
+                type="text"
+                placeholder="Ej: Hilos, Agujas, Botones...">
+        </div>
+        <div class="modal-actions flex justify-end items-center gap-3">
+            <button class="cancel-button inline-flex items-center gap-1.5 transition-all font-sans text-sm font-light px-5 py-2 rounded-lg border border-amber-900/20 bg-transparent text-amber-950 hover:bg-rose-100 hover:border-rose-400 hover:cursor-pointer">Cancelar</button>
+            <button class="save-button inline-flex items-center gap-1.5 transition-all font-sans text-sm px-5 py-2 rounded-lg bg-red-700/30 hover:text-gray-50 hover:bg-green-700/70">Guardar</button>
+        </div>
+    </div>
+</div>
+<script>
+    import { eventBus } from "../../scripts/eventBus";
+    import { editCategory } from "../../scripts/localStorage";
+
+    const modal = document.getElementById("modal-edit-cat");
+    const closeBtn = modal?.querySelector("div.modal-actions button.cancel-button");
+    const saveBtn = modal?.querySelector("div.modal-actions button.save-button");
+
+    //It gets populated on event
+    let catId: number;
+
+    //Listen local events
+    saveBtn?.addEventListener("click", (e) => {
+        console.log(catId);
+        const categoryName = (document.getElementById("edit-cat-name-input") as HTMLInputElement).value;
+        if(!categoryName) {
+            alert("El nombre de la categoria no puede estar vacio");
+            return;
+        }
+        editCategory(catId, categoryName);
+        modal?.classList.toggle("hidden");
+        window.location.reload();
+    });
+
+    closeBtn?.addEventListener("click", (e) => {
+        modal?.classList.toggle("hidden");
+    });
+
+    //Listen global events
+    eventBus.addEventListener("closeEditCategoryModal", (e) => {
+        modal?.classList.toggle("hidden");
+    });
+
+    eventBus.addEventListener("openEditCategoryModal", (e: CustomEventInit) => {
+        catId = e.detail;
+        modal?.classList.toggle("hidden");
+    });
+</script>

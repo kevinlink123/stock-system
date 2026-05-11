@@ -1,0 +1,73 @@
+<div id="modal-edit-prod" class="modal-cat hidden flex justify-center items-center fixed h-screen w-full z-100 bg-black/20">
+    <div class="modal-container mx-10 max-w-xl w-full bg-gray-50 p-8 rounded-xl">
+        <h2 id="edit-prod-cat-title" class="mb-5 text-title font-serif text-2xl font-bold text-amber-900">Renombrar categoría</h2>
+        <div class="product-input-wrapper flex flex-col gap-2 mb-4">
+            <label for="edit-prod-name-input" class="text-amber-700 uppercase">Nuevo nombre</label>
+            <input
+                name="edit-prod-name-input"
+                id="edit-prod-name-input"
+                class="flex-1 font-sans py-2 px-3.5 mb-4 border-[1.5px] border-red-300 rounded-xl"
+                type="text"
+                placeholder="Nuevo nombre"
+            >
+            <label for="edit-prod-price-input" class="text-amber-700 uppercase">Precio ($)</label>
+            <input
+                name="edit-prod-price-input"
+                id="edit-prod-price-input"
+                class="flex-1 font-sans py-2 px-3.5 border-[1.5px] border-red-300 rounded-xl"
+                type="text"
+                placeholder="0.00"
+            >
+        </div>
+        <div class="modal-actions flex justify-end items-center gap-3">
+            <button class="cancel-button inline-flex items-center gap-1.5 transition-all font-sans text-sm font-light px-5 py-2 rounded-lg border border-amber-900/20 bg-transparent text-amber-950 hover:bg-rose-100 hover:border-rose-400 hover:cursor-pointer">Cancelar</button>
+            <button class="save-button inline-flex items-center gap-1.5 transition-all font-sans text-sm px-5 py-2 rounded-lg bg-red-700/30 hover:text-gray-50 hover:bg-green-700/70">Guardar</button>
+        </div>
+    </div>
+</div>
+<script>
+    import { eventBus } from "../../scripts/eventBus";
+    import { editCategory, editProduct } from "../../scripts/localStorage";
+import type { Product } from "../../types";
+
+    const modal = document.getElementById("modal-edit-prod");
+    const closeBtn = modal?.querySelector("div.modal-actions button.cancel-button");
+    const saveBtn = modal?.querySelector("div.modal-actions button.save-button");
+
+    //It gets populated on event
+    let catId: number;
+    let prodId: number;
+
+    //Listen local events
+    saveBtn?.addEventListener("click", (e) => {
+        console.log(catId);
+        console.log(prodId);
+        const newProdName = (document.getElementById("edit-prod-name-input") as HTMLInputElement).value;
+        const newProdPrice = (document.getElementById("edit-prod-price-input") as HTMLInputElement).value;
+        if(!newProdName || !newProdPrice) {
+            alert("Ni el nombre del producto ni el precio pueden estar vacios!");
+            return;
+        }
+        editProduct(catId, prodId, {
+            name: newProdName,
+            price: parseInt(newProdPrice)
+        });
+        modal?.classList.toggle("hidden");
+        window.location.reload();
+    });
+
+    closeBtn?.addEventListener("click", (e) => {
+        modal?.classList.toggle("hidden");
+    });
+
+    //Listen global events
+    eventBus.addEventListener("openEditProductModal", (e: CustomEventInit) => {
+        catId = e.detail.catId;
+        prodId = e.detail.prodId;
+        modal?.classList.toggle("hidden");
+    });
+
+    eventBus.addEventListener("closeEditProductModal", (e) => {
+        modal?.classList.toggle("hidden");
+    });
+</script>
