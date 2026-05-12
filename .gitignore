@@ -5,6 +5,19 @@ dist/
 
 # dependencies
 node_modules/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Yarn 4 specific
+.yarn/install-state.gz
+.yarn/build-state.yml
+.yarn/cache
+.yarn/unplugged
+.pnp.*
+.yarnrc.yml
 
 # logs
 npm-debug.log*
