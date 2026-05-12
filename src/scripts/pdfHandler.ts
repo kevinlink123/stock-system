@@ -1,9 +1,9 @@
 import jsPDF from "jspdf";
 import { getData } from "./localStorage";
 
-export function generarPDF() {
+export async function generarPDF() {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const data = getData();
+  const data = await getData();
 
   const pageW = 210;
   const margin = 14;
