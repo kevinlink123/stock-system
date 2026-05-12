@@ -1,7 +1,7 @@
 
 import { type Product, type Category } from "../types";
 
-const API_URL="http://localhost:4000/api";
+const API_URL=import.meta.env.DEV ? "http://localhost:4000/api" : `${import.meta.env.PUBLIC_BACKEND_URL}/api`;
 
 export function getDataFromLocalStorage() {
     return JSON.parse(localStorage.getItem('merceria_data') || '[]');
